@@ -51,6 +51,7 @@ func Run() {
 func main() {
 	var rootfsPath string
 	flag.StringVar(&rootfsPath, "rootfs", "/tmp/shoten/rootfs", "Path to the root filesystem to use")
+	flag.Parse()
 
 	cmd := reexec.Command("InitContainer", rootfsPath)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
