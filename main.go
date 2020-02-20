@@ -30,6 +30,11 @@ func InitContainer() {
 		os.Exit(1)
 	}
 
+	if err := cgroup(); err != nil {
+		fmt.Printf("Error running cgroup - %s\n", err)
+		os.Exit(1)
+	}
+
 	Run()
 }
 
@@ -50,7 +55,12 @@ func Run() {
 
 func main() {
 	var rootfsPath string
-	flag.StringVar(&rootfsPath, "rootfs", "/tmp/shoten/rootfs", "Path to the root filesystem to use")
+	flag.StringVar(
+		&rootfsPath,
+		"rootfs",
+		"/tmp/shoten/rootfs",
+		"Path to the root filesystem to use",
+	)
 	flag.Parse()
 
 	cmd := reexec.Command("InitContainer", rootfsPath)
@@ -82,7 +92,7 @@ func main() {
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		fmt.Printf("Error running the /bin/sh command - %s\n", err)
+		fmt.Printf("Error running the reexec.Command - %s\n", err)
 		os.Exit(1)
 	}
 }
